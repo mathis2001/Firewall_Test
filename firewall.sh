@@ -18,11 +18,11 @@ main() {
 		iptables -t filter -A INPUT -j DROP
 		iptables -t filter -A FORWARD -j DROP
 		iptables -t filter -A OUTPUT -j DROP
-		iptables -t filter -I INPUT -s 192.168.50.250 -p tcp --dport 80 -j ACCEPT
-		iptables -t filter -I INPUT -s 192.168.50.250 -p tcp --dport 8080 -j ACCEPT
-		iptables -t filter -I INPUT -s 192.168.50.250 -p tcp --dport 443 -j ACCEPT
-		iptables -t filter -I INPUT -s 192.168.50.250 -p tcp --dport 21 -j ACCEPT
-		iptables -t filter -I INPUT -s 192.168.50.250 -p tcp --dport 22 -j ACCEPT
+		iptables -t filter -I INPUT -s "ip admin" -p tcp --dport 80 -j ACCEPT
+		iptables -t filter -I INPUT -s "ip admin" -p tcp --dport 8080 -j ACCEPT
+		iptables -t filter -I INPUT -s "ip admin" -p tcp --dport 443 -j ACCEPT
+		iptables -t filter -I INPUT -s "ip admin" -p tcp --dport 21 -j ACCEPT
+		iptables -t filter -I INPUT -s "ip admin" -p tcp --dport 22 -j ACCEPT
 		echo "[+] Accès aux services accordés à l'administrateur"
 	
 		echo "Voulez vous autoriser les accès aux services FTP et HTTP au reseau local ?"
@@ -31,11 +31,11 @@ main() {
 		if [ $RepServLocal = "oui" ]
 		then
 			echo "[+] Accès aux services autorisés au réseau local"
-			iptables -t filter -I INPUT  -s 192.168.50.0/24 -p tcp -m tcp --dport 21 -m conntrack --ctstate ESTABLISHED,NEW -j ACCEPT
-			iptables -t filter -I OUTPUT -s 192.168.50.0/24 -p tcp -m tcp --dport 21 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-			iptables -t filter -I INPUT -s 192.168.50.0/24 -p tcp -i eth0 --dport 80 -j ACCEPT
-			iptables -t filter -I INPUT -s 192.168.50.0/24 -p tcp -i eth0 --dport 8080 -j ACCEPT
-			iptables -t filter -I INPUT -s 192.168.50.0/24 -p tcp -i eth0 --dport 443 -j ACCEPT
+			iptables -t filter -I INPUT  -s "ip réseau local" -p tcp -m tcp --dport 21 -m conntrack --ctstate ESTABLISHED,NEW -j ACCEPT
+			iptables -t filter -I OUTPUT -s "ip réseau local" -p tcp -m tcp --dport 21 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+			iptables -t filter -I INPUT -s "ip réseau local" -p tcp -i eth0 --dport 80 -j ACCEPT
+			iptables -t filter -I INPUT -s "ip réseau local" -p tcp -i eth0 --dport 8080 -j ACCEPT
+			iptables -t filter -I INPUT -s "ip réseau local" -p tcp -i eth0 --dport 443 -j ACCEPT
 
 		elif [ $RepServLocal = "non" ]
 		then
@@ -85,9 +85,9 @@ main() {
 		if [ $RepWebLocal = "oui" ]
 		then
 			echo "[+] Accès au Web autorisé pour le réseau local"
-			iptables -t filter -I FORWARD -s 192.168.50.0/24 -p tcp -i eth0 --dport 80 -j ACCEPT
-			iptables -t filter -I FORWARD -s 192.168.50.0/24 -p tcp -i eth0 --dport 8080 -j ACCEPT
-			iptables -t filter -I FORWARD -s 192.168.50.0/24 -p tcp -i eth0 --dport 443 -j ACCEPT
+			iptables -t filter -I FORWARD -s "ip réseau local" -p tcp -i eth0 --dport 80 -j ACCEPT
+			iptables -t filter -I FORWARD -s "ip réseau local" -p tcp -i eth0 --dport 8080 -j ACCEPT
+			iptables -t filter -I FORWARD -s "ip réseau local" -p tcp -i eth0 --dport 443 -j ACCEPT
 
 		elif [ $RepWebLocal = "non" ]
 		then
